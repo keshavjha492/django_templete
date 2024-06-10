@@ -22,7 +22,7 @@ def send_email_activation(user, request):
     """
 
     key = generate_activation_key(user)
-    final_url = f"http://127.0.0.1:8000/{user.username}/{key}"
+    final_url = f"http://127.0.0.1:8000/account/activate/{user.username}/{key}"
     
     subject ="User Account Activation"
     message = f"""
