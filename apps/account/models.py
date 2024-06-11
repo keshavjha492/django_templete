@@ -1,9 +1,9 @@
-from django.db import models
 import uuid
+from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.auth.hashers import make_password
 from apps.commons.models import DateTimeModel
-from django.apps import apps
+
 
 class CustomUserManager(UserManager):
 
@@ -19,6 +19,7 @@ class CustomUserManager(UserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_verified", True)
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")
@@ -32,34 +33,34 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
     username = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    email = models.EmailField(max_length=50 ,unique=True)
+    email = models.EmailField(max_length=50, unique=True)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
-    
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']   
-    
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
+
     objects = CustomUserManager()
 
 
 class UserProfile(DateTimeModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    profile_picture= models.FileField(null=True, blank=True, upload_to='profile_picture')
-    phone = models.CharField(max_length=20)
-    address = models.CharField(max_length=200)
-    resume = models.FileField(null=True, blank=True, upload_to='resumes')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.FileField(null=True, blank=True, upload_to="profile_pictures")
+    phone = models.CharField(max_length=14)
+    address = models.CharField(max_length=50)
+    resume = models.FileField(null=True, blank=True, upload_to="resumes")
     bio = models.TextField(max_length=500)
-    
-    
+
     def __str__(self):
-        return f"profile of {self.user.email}"
-    
-class UserAccountACtivation(DateTimeModel):
+        return f"Profile of {self.user.email}"
+
+
+class UserAccountActivation(DateTimeModel):
     email = models.EmailField(max_length=50)
     key = models.CharField(max_length=100)
-    
-    
+
     def __str__(self):
-        return f"account activation of {self.email}"
+        return f"Key of {self.email}"

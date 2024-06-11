@@ -1,25 +1,75 @@
 {% extends 'layouts/sub_base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
+{% block style %}
+    <style>
+        #resend {
+            color: white;
+            text-decoration: none;
+            font-weight: lighter;
+        }
+
+        #resend:hover {
+            text-decoration: underline;
+        }
+
+        .card-body p{
+            margin: 3px;
+            color: grey;
+        }
+
+        .job-title{
+            color: black;
+            text-decoration: none;
+        }
+        .job-title:hover{
+            text-decoration: underline;
+        }
+
+    </style>
+{% endblock %}
+
 {% block sub_content %}
     {% if request.user.is_authenticated and not request.user.is_verified %}
-        <div id="cross-message" style="background-color: coral; color: white; width: 40%; padding: 5px; border-radius: 15px;margin: auto">
-        <h5 style="margin-left: 5px; cursor: pointer">
-            Please activate your email
-        <a href="{% url 'resend_ac_activation' request.user.id %}"><small style="font-size: 0.8rem;">Resend email activation</small></a>
-            <sup style="margin-left: 100px" onclick="hideMessage()">x</sup>
-        </h5>
+        <div id="cross-message"
+             style="background-color: red; color: white; width: 40%; padding: 5px; border-radius: 15px;margin: auto">
+            <h5 style="margin-left: 3px; cursor: pointer">
+                Please activate your email
+                <a id="resend" href="{% url 'resend_ac_activation' request.user.id %}"><small>Resend
+                    email activation</small></a>
+                <sup style="margin-left: 100px" onclick="hideMessage()">x</sup>
+            </h5>
         </div>
+        <br>
     {% endif %}
-    <h1>Home</h1>
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for job in object_list %}
+            <div class="card" style="width: 18rem;flex: 1 1 30%; margin: 5px; padding: 10px;">
+                <img class="card-img-top" style="height: 60%; width: 60%" src="{% static 'main/job/job.png' %}" alt="Card image cap">
+                <hr>
+                <div class="card-body">
+                    <h5><a href="#" class="job-title">{{ job.title }}</a></h5>
+                    <p class="card-text"><i class="fa fa-map-marker"></i> {{ job.location }}</p>
+                    <p class="card-text"><i class="fa-solid fa-list"></i> {{ job.category.title }}</p>
+                    <p class="card-text" style="font-size: 0.8rem; color: red"><i class="fa fa-clock-o"></i> {{ job.apply_before }}</p>
+                    {% if request.user.is_authenticated %}
+                        <a href="#" class="btn btn-outline-primary" style="float: right">Apply Now</a>
+                        {% else %}
+                        <a href="{% url 'user_login' %}" class="btn btn-outline-primary" style="float: right">Apply Now</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block extra_js %}
     <script>
-    function hideMessage(){
-        messg = document.getElementById("cross-message")
-        messg.style.display = "none"
-    }
+        function hideMessage() {
+            messg = document.getElementById("cross-message")
+            messg.style.display = "none"
+        }
     </script>
 {% endblock %}

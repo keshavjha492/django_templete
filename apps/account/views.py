@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegisterForm, UserLoginForm
 from .utils import send_email_activation
-from .models import UserAccountACtivation
+from .models import UserAccountActivation
 
 User = get_user_model()
 
