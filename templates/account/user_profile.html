@@ -50,8 +50,8 @@
                 <tr>
                     <td>Account Status</td>
                     <td>{% if object.is_verified %}
-                        Activated
-                    {% else %}Not Activated{% endif %}</td>
+                        <span style="background-color: forestgreen; padding: 5px; color: white">Activated</span>
+                    {% else %}<span style="background-color: tomato; padding: 5px; color: white">Not Activated</span>{% endif %}</td>
                 </tr>
             </table>
         </div>
