@@ -9,4 +9,5 @@ urlpatterns = [
     path("activate/<str:username>/<str:key>/", views.UserAccountActivationView.as_view(), name="ac_activation"),
     path("resend-activation/<int:id>/", views.ResendEmailActivation.as_view(), name="resend_ac_activation"),
     path("user-profile/<int:pk>/", views.UserProfileView.as_view(), name="user_profile")
+
 ]

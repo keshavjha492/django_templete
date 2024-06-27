@@ -80,3 +80,4 @@ class ResendEmailActivation(View):
 class UserProfileView(DetailView):
     queryset = User.objects.all()
     template_name = "account/user_profile.html"
+
